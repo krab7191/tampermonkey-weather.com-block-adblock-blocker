@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Weather Channel
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Block the adblock blocker
 // @author       Karsten Rabe <https://github.com/krab7191>
 // @match        https://weather.com/*
@@ -11,6 +11,7 @@
 (function () {
   'use strict';
   let timer;
+  let veilFound = false;
 
   function deleteVeilNodes() {
     const msgNodes = document.querySelectorAll('div[style="display: block;"]');
@@ -36,11 +37,12 @@
     console.log('Adblock blocker blocker is running...');
     const spVeil = document.querySelectorAll('div[style="display: block"]');
     if (spVeil.length > 0 && spVeil[0].className.includes('sp_veil')) {
+      veilFound = true;
       deleteVeilNodes();
       makeBodyScrollable();
-    } else {
+    } else if (veilFound) {
       window.clearTimeout(timer);
       console.log('Adblock block blocking finished!');
     }
-  }, 3000);
+  }, 1000);
 })();
